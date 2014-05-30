@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>xy</key>
+		<string>500,600</string>
+		<key>radius</key>
+		<integer>20</integer>
+		<key>num</key>
+		<integer>10</integer>
+		<key>space</key>
+		<integer>5</integer>
+		<key>up</key>
+		<true/>
+		<key>text</key>
+		<string>Evan loves+nuts.</string>
+	</dict>
+	<dict>
+		<key>xy</key>
+		<string>50,20</string>
+		<key>radius</key>
+		<integer>6</integer>
+		<key>num</key>
+		<integer>20</integer>
+		<key>space</key>
+		<integer>4</integer>
+		<key>up</key>
+		<false/>
+		<key>text</key>
+		<string>Evan loves nuts. Evan loves nuts. </string>
+	</dict>
+</array>
+</plist>
