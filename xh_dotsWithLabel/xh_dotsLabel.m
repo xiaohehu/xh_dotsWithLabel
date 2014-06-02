@@ -7,17 +7,17 @@
 //
 
 #import "xh_dotsLabel.h"
-#define kBigDotSize  80.0
+#define kBigDotSize  25.0
 
-static float radius_0 = 5.0;
-static float radius_1 = 10.0;
-static float radius_2 = 15.0;
-static float radius_3 = 20.0;
+static float radius_0 = 1.0;
+static float radius_1 = 3;
+static float radius_2 = 4;
+static float radius_3 = 6;
 
-static float space_0 = 2.5;
+static float space_0 = 2.0;
 static float space_1 = 5.0;
-static float space_2 = 7.5;
-static float space_3 = 10.0;
+static float space_2 = 8.0;
+static float space_3 = 21.0;
 
 static float fontSize_0 = 10.0;
 static float fontSize_1 = 15.0;
@@ -27,10 +27,12 @@ static float fontSize_3 = 25.0;
 @interface xh_dotsLabel ()
 @property (nonatomic, strong)   UIView          *uiv_bigDot;
 @property (nonatomic, strong)   UITextView      *uitv_textView;
+@property (nonatomic, strong)   UIButton        *uib_bigDot;
 @end
 
 @implementation xh_dotsLabel
-@synthesize dict_viewData;
+@synthesize delegate;
+@synthesize dict_viewData, dot_image, tappable;
 
 -(void)setDict_viewData:(NSDictionary *)viewData {
     if (viewData == nil)
@@ -39,6 +41,24 @@ static float fontSize_3 = 25.0;
         dict_viewData = [[NSDictionary alloc] init];
         dict_viewData = viewData;
         [self initViewData];
+    }
+}
+
+-(void)setDot_image:(NSString *)image {
+    if (image == nil)
+        return;
+    else {
+        dot_image = [[NSString alloc] initWithString:image];
+        [self setBackgroundImage];
+    }
+}
+
+-(void)setTappable:(BOOL)tap {
+    tappable = tap;
+    
+    if (tappable) {
+        self.userInteractionEnabled = YES;
+        [self setBigDotTappable];
     }
 }
 
@@ -117,7 +137,7 @@ static float fontSize_3 = 25.0;
     
     self.frame = CGRectMake(x_Value, y_Value, kBigDotSize, kBigDotSize);
     self.clipsToBounds = NO;
-    self.backgroundColor = [UIColor blueColor];
+    self.backgroundColor = [UIColor redColor];
     
     //Create Dots
     if (directionUP) {
@@ -133,15 +153,15 @@ static float fontSize_3 = 25.0;
         [self addSubview: _uiv_bigDot];
         
         CGSize dotSize = CGSizeMake(radius_Value*2, radius_Value*2);
-        CGPoint dotCenter = _uiv_bigDot.center;
         for (int i = 0; i < numOfDots; i++) {
             UIView *uiv_smallDots = [[UIView alloc] init];
             uiv_smallDots.backgroundColor = [UIColor whiteColor];
             
-            uiv_smallDots.frame = CGRectMake(dotCenter.x - radius_Value, dotCenter.y - kBigDotSize/2 - 2 * radius_Value - space_Value - (space_Value + dotSize.height)*i, dotSize.width, dotSize.height);
-            CGPoint savedCenter = uiv_smallDots.center;
+            uiv_smallDots.frame = CGRectMake(savedCenter.x - radius_Value, savedCenter.y - kBigDotSize/2 - 2 * radius_Value - space_Value - (space_Value + dotSize.height)*i, dotSize.width, dotSize.height);
+            CGPoint smallCenter = uiv_smallDots.center;
             uiv_smallDots.layer.cornerRadius = radius_Value;
-            uiv_smallDots.center = savedCenter;
+            uiv_smallDots.layer.shouldRasterize = YES;
+            uiv_smallDots.center = smallCenter;
             [self addSubview:uiv_smallDots];
         }
     }
@@ -157,16 +177,17 @@ static float fontSize_3 = 25.0;
         _uiv_bigDot.center = savedCenter;
         [self addSubview: _uiv_bigDot];
         
+        CGSize dotSize = CGSizeMake(radius_Value*2, radius_Value*2);
         for (int i = 0; i < numOfDots; i++) {
             UIView *uiv_smallDots = [[UIView alloc] init];
             uiv_smallDots.backgroundColor = [UIColor whiteColor];
-            CGSize dotSize = CGSizeMake(radius_Value*2, radius_Value*2);
-            CGPoint dotCenter = _uiv_bigDot.center;
             
-            uiv_smallDots.frame = CGRectMake(dotCenter.x - radius_Value, dotCenter.y + kBigDotSize/2 + space_Value + (space_Value + dotSize.height)*i, dotSize.width, dotSize.height);
-            CGPoint savedCenter = uiv_smallDots.center;
+            
+            uiv_smallDots.frame = CGRectMake(savedCenter.x - radius_Value, savedCenter.y + kBigDotSize/2 + space_Value + (space_Value + dotSize.height)*i, dotSize.width, dotSize.height);
+            CGPoint smallCenter = uiv_smallDots.center;
             uiv_smallDots.layer.cornerRadius = radius_Value;
-            uiv_smallDots.center = savedCenter;
+            uiv_smallDots.layer.shouldRasterize = YES;
+            uiv_smallDots.center = smallCenter;
             [self addSubview:uiv_smallDots];
         }
     }
@@ -177,12 +198,13 @@ static float fontSize_3 = 25.0;
 -(void)initText {
     if (directionUP) {
         _uitv_textView = [[UITextView alloc] initWithFrame:CGRectMake(0, -100, 500, 100)];
-        _uitv_textView.backgroundColor = [UIColor redColor];
+        _uitv_textView.backgroundColor = [UIColor clearColor];
         _uitv_textView.userInteractionEnabled = NO;
         NSString *textContent = [[NSString alloc] initWithString:[dict_viewData objectForKey:@"text"]];
         _uitv_textView.text = [textContent stringByReplacingOccurrencesOfString:@"+" withString:@"\n"];
         [_uitv_textView setFont:[UIFont systemFontOfSize:font_Size]];
         [_uitv_textView setTextColor:[UIColor whiteColor]];
+        [_uitv_textView setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_uitv_textView];
 
         CGSize textFrame = [_uitv_textView sizeThatFits:CGSizeMake(_uitv_textView.frame.size.width, FLT_MAX)];
@@ -190,12 +212,13 @@ static float fontSize_3 = 25.0;
     }
     else {
         _uitv_textView = [[UITextView alloc] initWithFrame:CGRectMake(0, -100, 500, 100)];
-        _uitv_textView.backgroundColor = [UIColor redColor];
+        _uitv_textView.backgroundColor = [UIColor clearColor];
         _uitv_textView.userInteractionEnabled = NO;
         NSString *textContent = [[NSString alloc] initWithString:[dict_viewData objectForKey:@"text"]];
         _uitv_textView.text = [textContent stringByReplacingOccurrencesOfString:@"+" withString:@"\n"];
         [_uitv_textView setFont:[UIFont fontWithName:nil size:20]];
         [_uitv_textView setTextColor:[UIColor whiteColor]];
+        [_uitv_textView setTextAlignment:NSTextAlignmentCenter];
         [self addSubview:_uitv_textView];
 #warning The following method only works in iOS 7
         CGSize textFrame = [_uitv_textView sizeThatFits:CGSizeMake(_uitv_textView.frame.size.width, FLT_MAX)];
@@ -203,6 +226,29 @@ static float fontSize_3 = 25.0;
     }
 }
 
+-(void)setBackgroundImage {
+    if (dot_image) {
+        [_uib_bigDot setBackgroundImage:[UIImage imageNamed:dot_image] forState:UIControlStateNormal];
+    }
+}
+
+-(void)setBigDotTappable {
+    _uib_bigDot = [UIButton buttonWithType:UIButtonTypeCustom];
+    _uib_bigDot.frame = CGRectMake(0.0, _uiv_bigDot.frame.origin.y, self.frame.size.width, kBigDotSize);
+    _uib_bigDot.backgroundColor = [UIColor clearColor];
+    _uib_bigDot.tag = self.tag;
+    [_uib_bigDot addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchDown];
+    [self addSubview: _uib_bigDot];
+}
+
+-(void)buttonTapped:(id)sender {
+    UIButton *tmpButton = sender;
+    [self didSelectedItemAtIndex:tmpButton.tag];
+}
+#pragma mark - Delegate Method
+-(void)didSelectedItemAtIndex:(int)index {
+    [self.delegate didSelectedItemAtIndex:index];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

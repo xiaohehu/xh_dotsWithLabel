@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface xh_dotsLabel : UIView
+@protocol dotLabelDelegate
+-(void)didSelectedItemAtIndex:(int)index;
+@end
+
+@interface xh_dotsLabel : UIView <UIGestureRecognizerDelegate>
 {
     CGRect      viewFrame;
     float       x_Value;
@@ -19,6 +23,9 @@
     int         numOfDots;
     BOOL        directionUP;
 }
+@property (nonatomic, strong) id<dotLabelDelegate>  delegate;
 
 @property (nonatomic, strong) NSDictionary *dict_viewData;
+@property (nonatomic, strong) NSString     *dot_image;
+@property (nonatomic, readwrite) BOOL      tappable;
 @end
