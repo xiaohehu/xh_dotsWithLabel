@@ -8,13 +8,15 @@
 		<key>radius</key>
 		<integer>20</integer>
 		<key>num</key>
-		<integer>10</integer>
+		<integer>5</integer>
 		<key>space</key>
 		<integer>5</integer>
 		<key>up</key>
 		<true/>
 		<key>text</key>
 		<string>Evan loves+nuts.</string>
+		<key>zValue</key>
+		<integer>0</integer>
 	</dict>
 	<dict>
 		<key>xy</key>
@@ -22,13 +24,15 @@
 		<key>radius</key>
 		<integer>6</integer>
 		<key>num</key>
-		<integer>20</integer>
+		<integer>5</integer>
 		<key>space</key>
 		<integer>4</integer>
 		<key>up</key>
 		<false/>
 		<key>text</key>
 		<string>Evan loves nuts. Evan loves nuts. </string>
+		<key>zValue</key>
+		<integer>1</integer>
 	</dict>
 </array>
 </plist>

@@ -15,6 +15,7 @@
     float       y_Value;
     float       radius_Value;
     float       space_Value;
+    float       font_Size;
     int         numOfDots;
     BOOL        directionUP;
 }
